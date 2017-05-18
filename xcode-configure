@@ -224,18 +224,19 @@ generate_ipa=\\
     cp -rf "${build_directory}/$configuration-iphoneos/\$1/\$1.app" "$build_directory/target/Payload"; \\
     cd "$build_directory/target"; \\
     zip -r "\$1.ipa" "Payload"; \\
+    cp -rf "$build_directory/target/\$1.ipa" "$install_directory";\\
     cd -; \\
     rm -rf "$build_directory/target/Payload"
 generate_lib=\\
-    cp -rf "${build_directory}/$configuration-iphoneos/\$1" "$build_directory/target"; \\
-    mv $build_directory/target/\$1/lib\$1.a $build_directory/target/\$1/\$1.a;\\
+    cp -rf "${build_directory}/$configuration-iphoneos/\$1" "$install_directory"; \\
+    mv $install_directory/\$1/lib\$1.a $install_directory/\$1/\$1.a;\\
     if [ $ENABLE_SIMULATOR -eq "1" ]; then \\
-        lipo -create "${build_directory}/$configuration-iphoneos/\$1/lib\$1.a" "${build_directory}/$configuration-iphonesimulator/\$1/lib\$1.a" -output "$build_directory/target/\$1/\$1.a";\\
+        lipo -create "${build_directory}/$configuration-iphoneos/\$1/lib\$1.a" "${build_directory}/$configuration-iphonesimulator/\$1/lib\$1.a" -output "$install_directory/\$1/\$1.a";\\
     fi
 generate_framework=\\
-    cp -rf "${build_directory}/$configuration-iphoneos/\$1" "$build_directory/target";\\
+    cp -rf "${build_directory}/$configuration-iphoneos/\$1/\$1.framework" "$install_directory";\\
     if [ $ENABLE_SIMULATOR -eq "1" ]; then \\
-        lipo -create "${build_directory}/$configuration-iphoneos/\$1/\$1.framework/\$1" "${build_directory}/$configuration-iphonesimulator/\$1/\$1.framework/\$1" -output "$build_directory/target/\$1/\$1.framework/\$1";\\
+        lipo -create "${build_directory}/$configuration-iphoneos/\$1/\$1.framework/\$1" "${build_directory}/$configuration-iphonesimulator/\$1/\$1.framework/\$1" -output "$install_directory\$1.framework/\$1";\\
     fi
 EOF
 phony_add all
@@ -248,6 +249,7 @@ for scheme in $schemes; do
 done
 phony_add $install_dependent $clean_dependent
 rm -rf "$install_directory"
+rm -rf "$build_directory"
 cat << EOF
 all: $original_schemes
 clean:$clean_dependent
