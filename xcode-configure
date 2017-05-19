@@ -236,7 +236,7 @@ generate_lib=\\
 generate_framework=\\
     cp -rf "${build_directory}/$configuration-iphoneos/\$1/\$1.framework" "$install_directory";\\
     if [ $ENABLE_SIMULATOR -eq "1" ]; then \\
-        lipo -create "${build_directory}/$configuration-iphoneos/\$1/\$1.framework/\$1" "${build_directory}/$configuration-iphonesimulator/\$1/\$1.framework/\$1" -output "$install_directory\$1.framework/\$1";\\
+        lipo -create "${build_directory}/$configuration-iphoneos/\$1/\$1.framework/\$1" "${build_directory}/$configuration-iphonesimulator/\$1/\$1.framework/\$1" -output "$install_directory/\$1.framework/\$1";\\
     fi
 EOF
 phony_add all
